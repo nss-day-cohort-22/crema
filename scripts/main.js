@@ -11,52 +11,63 @@ CremaDatabase.orders.forEach(
 
         // Get the employee
         const employee = CremaDatabase.employees.find(
-            c => c.EmployeeId === order.EmployeeId
+            e => e.EmployeeId === order.EmployeeId
         )
 
         // Get the location
         const location = CremaDatabase.locations.find(
-            c => c.LocationId === order.LocationId
+            l => l.LocationId === order.LocationId
         )
 
         // Get the payment
         const payment = CremaDatabase.paymentTypes.find(
-            c => c.PaymentId === order.PaymentId
+            p => p.PaymentId === order.PaymentId
         )
 
         // Get the products
         const orderProducts = CremaDatabase.orderProducts.filter(
-            c => c.OrderId === order.OrderId
+            op => op.OrderId === order.OrderId
         )
 
-        const arrayOfOrderedProducts = []
+        /*
+            Create a variable, initialized to 0, to hold the total
+            price of the order
+        */
         let totalPrice = 0
 
+        /*
+            Now that we have a reference to all of the products on
+            the order, let's get the actual product object in the
+            Products table
+        */
         orderProducts.forEach(
             op => {
+                // The product object with the matching primary key
                 const foundProduct = CremaDatabase.products.find(
                     p => op.ProductId === p.ProductId
                 )
 
-                arrayOfOrderedProducts.push(foundProduct)
+                // Add price of current line item to total price of order
                 totalPrice += foundProduct.Price
             }
         )
 
+        // Build the HTML representation of the current order
         domString += `
-            <article id="order--${order.OrderId}">
+            <article id="order--${order.OrderId}" class="order">
                 <section class="order__customer">
                     <h2>${currentCustomer.Name}</h2>
                 </section>
-                <section>
+                <section class="order__price>
                     Total price: $${totalPrice}
                 </section>
-                Date ordered: <time>${order.Date}</time>
+                <section class="order__date>
+                    Date ordered: <time>${order.Date}</time>
+                </section>
             </article>
         `
-
-        let x = 1 // My breakpoint
     }
 )
 
+// Add all order components to the DOM
 orderSummaryEl.innerHTML = domString
