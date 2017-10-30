@@ -8,3 +8,5 @@ const CremaDatabase = {
     "locations": locations,
     "orderProducts": orderProducts,
 }
+
+localStorage.setItem("CremaDatabase", JSON.stringify(CremaDatabase))
