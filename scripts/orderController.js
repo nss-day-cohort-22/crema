@@ -1,7 +1,25 @@
+// Reference to the DOM element which will contain all order components
 const orderSummaryEl = document.getElementById("orders")
 
+// Define variable for holding order components, as a string
 let domString = ""
 
+// Factory function to build order component for DOM
+const orderComponentFactory = (order, customer, price) => `
+    <article id="order--${order.OrderId}" class="order">
+    <section class="order__customer">
+        <h2>${customer.Name}</h2>
+    </section>
+    <section class="order__price>
+        Total price: $${price}
+    </section>
+    <section class="order__date>
+        Date ordered: <time>${order.Date}</time>
+    </section>
+    </article>
+`
+
+// Iterate over all the orders
 CremaDatabase.orders.forEach(
     order => {
         // Get the customer
@@ -53,19 +71,7 @@ CremaDatabase.orders.forEach(
         )
 
         // Build the HTML representation of the current order
-        domString += `
-            <article id="order--${order.OrderId}" class="order">
-                <section class="order__customer">
-                    <h2>${currentCustomer.Name}</h2>
-                </section>
-                <section class="order__price>
-                    Total price: $${totalPrice}
-                </section>
-                <section class="order__date>
-                    Date ordered: <time>${order.Date}</time>
-                </section>
-            </article>
-        `
+        domString += orderComponentFactory(order, currentCustomer, totalPrice)
     }
 )
 
